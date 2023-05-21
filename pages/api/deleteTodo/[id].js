@@ -1,9 +1,8 @@
-import { table, getMinifiedRecord } from './utils/airtable';
+import { table, getMinifiedRecord } from '@/pages/api/utils/airtable';
 
 export default async function handler(req, res) {
   if (req.method === 'DELETE') {
-    console.log('API request body: ', req.body);
-    const { id } = req.body;
+    const { id } = req.query;
     try {
       const deletedRecords = await table.destroy([id]);
       res.status(200).json(getMinifiedRecord(deletedRecords[0]));
