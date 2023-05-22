@@ -17,7 +17,7 @@ const TodosProvider = ({ children }) => {
 
   const addTodo = async () => {
     try {
-      const res = await fetch('/api/getTodos', {
+      const res = await fetch('/api/createTodo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ description }),
@@ -32,8 +32,9 @@ const TodosProvider = ({ children }) => {
   };
 
   const updateTodo = async (updatedTodo) => {
+    console.log(updatedTodo);
     try {
-      const res = await fetch('/api/getTodos', {
+      const res = await fetch('/api/updateTodo', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ updatedTodo }),

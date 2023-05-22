@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { TodosContext } from '@/context/TodosContext';
 
 export default function Todo({ todo }) {
-  const { updateTodo, deleteTodo } = useContext(TodosContext);
+  const { updateTodo, deleteTodo, refreshTodos } = useContext(TodosContext);
 
   const handleToggleCompleted = () => {
     const updatedFields = {
@@ -34,8 +34,8 @@ export default function Todo({ todo }) {
       <button
         type="button"
         className="text-sm bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded"
-        onClick={() => {
-          deleteTodo(todo.id);
+        onClick={async () => {
+          await deleteTodo(todo.id);
         }}
       >
         Delete
