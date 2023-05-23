@@ -15,7 +15,7 @@ const TodosProvider = ({ children }) => {
     }
   };
 
-  const addTodo = async () => {
+  const addTodo = async (description) => {
     try {
       const res = await fetch('/api/createTodo', {
         method: 'POST',
@@ -32,7 +32,6 @@ const TodosProvider = ({ children }) => {
   };
 
   const updateTodo = async (updatedTodo) => {
-    console.log(updatedTodo);
     try {
       const res = await fetch('/api/updateTodo', {
         method: 'PUT',
@@ -54,8 +53,6 @@ const TodosProvider = ({ children }) => {
   };
 
   const deleteTodo = async (id) => {
-    console.log('delete function argument:', id);
-    console.log(JSON.stringify({ id }));
     try {
       await fetch(`/api/deleteTodo/${id}`, {
         method: 'DELETE',

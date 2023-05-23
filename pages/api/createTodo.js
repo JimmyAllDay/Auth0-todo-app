@@ -1,4 +1,4 @@
-import { table } from './utils/airtable';
+import { table, getMinifiedRecord } from './utils/airtable';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -9,9 +9,9 @@ export default async function handler(req, res) {
         id: createdRecords[0].id,
         fields: createdRecords[0].fields,
       };
-      const minifiedRecords = minifyRecords(records);
-      res.status(200).json(createdRecord);
-    } catch {
+      res.status(200).json(getMinifiedRecord(createdRecord));
+    } catch (err) {
+      console.error(err);
       res.status(500).json({ msg: 'something went wrong' });
     }
   } else {

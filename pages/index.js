@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Head from 'next/head';
 import Navbar from '@/components/Navbar';
 import Todo from '@/components/Todo';
+import TodoForm from '@/components/TodoForm';
 import { table, minifyRecords } from '@/pages/api/utils/airtable';
 import { TodosContext } from '@/context/TodosContext';
 import { useEffect, useContext } from 'react';
@@ -11,7 +12,7 @@ export default function Home({ initialTodos, user }) {
   const { todos, setTodos } = useContext(TodosContext);
   useEffect(() => {
     setTodos(initialTodos);
-  });
+  }, [initialTodos, setTodos]);
 
   return (
     <div>
@@ -21,6 +22,7 @@ export default function Home({ initialTodos, user }) {
       </Head>
       <Navbar user={user} />
       <main className="flex min-h-screen flex-col items-center">
+        {user && <TodoForm />}
         <ul className=" w-full">
           {todos && todos.map((todo) => <Todo key={todo.id} todo={todo} />)}
         </ul>
@@ -32,8 +34,8 @@ export default function Home({ initialTodos, user }) {
 export const getServerSideProps = withPageAuthRequired({
   async getServerSideProps(context) {
     try {
-      const todos = await table.select({}).firstPage();
       const session = await getSession(context.req, context.res);
+      const todos = await table.select({}).firstPage();
       const serialisedSession = JSON.parse(JSON.stringify(session));
       return {
         props: {

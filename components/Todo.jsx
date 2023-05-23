@@ -15,21 +15,21 @@ export default function Todo({ todo }) {
   };
 
   return (
-    <li className="bg-white flex shadow-lg rounded-lg my-2 py-2 px-4 w-full">
+    <li className="bg-white flex shadow-md rounded-lg my-2 py-2 px-4 w-full">
       <input
         type="checkbox"
         name="completed"
         id="completed"
-        checked={todo.fields.completed}
+        checked={todo?.fields?.completed || false}
         className="mr-2 h-5 form-checkbox checked:bg-blue-500"
         onChange={handleToggleCompleted}
       />
       <p
         className={`flex-1 text-gray-800 ${
-          todo.fields.completed ? 'line-through' : ''
+          todo?.fields?.completed ? 'line-through' : ''
         }`}
       >
-        {todo.fields.description}
+        {todo?.fields?.description}
       </p>
       <button
         type="button"
