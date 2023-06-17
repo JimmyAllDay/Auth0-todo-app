@@ -1,6 +1,8 @@
 import { table, getMinifiedRecord } from '@/pages/api/utils/airtable';
+import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
-export default async function handler(req, res) {
+export default withApiAuthRequired(async function handler(req, res) {
+  const { user } = await getSession(req, res);
   if (req.method === 'DELETE') {
     const { id } = req.query;
     try {
@@ -13,4 +15,4 @@ export default async function handler(req, res) {
   } else {
     res.status(405).json({ msg: 'Method not allowed' });
   }
-}
+});

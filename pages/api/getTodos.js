@@ -1,9 +1,16 @@
 import { table, minifyRecords } from './utils/airtable';
+import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
-export default async function handler(req, res) {
+export default withApiAuthRequired(async function handler(req, res) {
+  const { user } = await getSession(req, res);
   if (req.method === 'GET') {
     try {
-      const records = await table.select({}).firstPage();
+      const records = await table
+        .select({
+          filterByFormula: `userid = '${user.sub}'`,
+        })
+        .firstPage();
+
       const minifiedRecords = minifyRecords(records);
       res.status(200).json(minifiedRecords);
     } catch (err) {
@@ -13,4 +20,4 @@ export default async function handler(req, res) {
   } else {
     res.status(405).json({ msg: 'Method not allowed' });
   }
-}
+});

@@ -1,10 +1,15 @@
 import { table, getMinifiedRecord } from './utils/airtable';
+import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
-export default async function handler(req, res) {
+export default withApiAuthRequired(async function handler(req, res) {
+  const { user } = await getSession(req, res);
+
   if (req.method === 'POST') {
     const { description } = req.body;
     try {
-      const createdRecords = await table.create([{ fields: { description } }]);
+      const createdRecords = await table.create([
+        { fields: { description, userid: user.sub } },
+      ]);
       const createdRecord = {
         id: createdRecords[0].id,
         fields: createdRecords[0].fields,
@@ -17,4 +22,4 @@ export default async function handler(req, res) {
   } else {
     res.status(405).json({ msg: 'Method not allowed' });
   }
-}
+});

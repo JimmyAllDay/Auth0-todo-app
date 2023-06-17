@@ -1,8 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { TodosContext } from '@/context/TodosContext';
+import LoadingBar from '@/components/LoadingBar';
+import PulseLoader from '@/components/PulseLoader';
+import { truncateString } from '@/utils/todos';
 
 export default function Todo({ todo }) {
-  const { updateTodo, deleteTodo, refreshTodos } = useContext(TodosContext);
+  const { id } = todo;
+  const { loadingStates, updateTodo, deleteTodo, refreshTodos } =
+    useContext(TodosContext);
 
   const handleToggleCompleted = () => {
     const updatedFields = {
@@ -11,35 +16,62 @@ export default function Todo({ todo }) {
     };
     const updatedTodo = { id: todo.id, fields: updatedFields };
 
-    updateTodo(updatedTodo);
+    updateTodo(updatedTodo, id);
   };
 
+  const checkboxClasses =
+    'w-5 h-5 mr-2 my-auto border border-neutral-500 rounded-sm checked:bg-violet-400 checked:text-black checked:border-violet-400 appearance-none bg-neutral-700';
+
+  const buttonClasses =
+    'text-sm bg-neutral-700 hover:bg-neutral-600 hover:bg-opacity-40 hover:text-red-400 text-neutral-400 py-1 px-1 rounded-tr rounded-br border-s border-neutral-500 w-[70px]';
+
   return (
-    <li className="bg-white flex shadow-md rounded-lg my-2 py-2 px-4 w-full">
-      <input
-        type="checkbox"
-        name="completed"
-        id="completed"
-        checked={todo?.fields?.completed || false}
-        className="mr-2 h-5 form-checkbox checked:bg-blue-500"
-        onChange={handleToggleCompleted}
-      />
-      <p
-        className={`flex-1 text-gray-800 ${
-          todo?.fields?.completed ? 'line-through' : ''
-        }`}
-      >
-        {todo?.fields?.description}
-      </p>
-      <button
-        type="button"
-        className="text-sm bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded"
-        onClick={async () => {
-          await deleteTodo(todo.id);
-        }}
-      >
-        Delete
-      </button>
+    <li className="flex shadow-md rounded my-2 w-full bg-neutral-700 border border-neutral-500">
+      <div className="flex w-full flex-col">
+        <div className="flex w-full py-2 pl-2 text-neutral-400">
+          <div
+            className={`flex-1 text-sm ${
+              todo?.fields?.completed
+                ? 'line-through text-neutral-500 text-opacity-70'
+                : ''
+            }`}
+          >
+            {todo?.fields?.description === 'Loading...' ? (
+              <div className="flex justify-center">
+                <div className="h-4 bg-neutral-600 w-4/5"></div>
+              </div>
+            ) : (
+              <p>{todo?.fields?.description}</p>
+            )}
+          </div>
+          {todo?.fields?.description !== 'Loading...' && (
+            <input
+              type="checkbox"
+              name={'check' + '-' + id}
+              id={'check' + '-' + id}
+              checked={todo?.fields?.completed || false}
+              className={checkboxClasses}
+              onChange={handleToggleCompleted}
+            />
+          )}
+        </div>
+        <div className="h-1">
+          <LoadingBar loading={loadingStates(id)} />
+        </div>
+      </div>
+      {todo?.fields?.description !== 'Loading...' && (
+        <>
+          <button
+            type="button"
+            className={buttonClasses}
+            onClick={async () => {
+              await deleteTodo(todo.id);
+            }}
+          >
+            Delete
+          </button>
+        </>
+      )}
     </li>
   );
 }
