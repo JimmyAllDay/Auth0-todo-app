@@ -26,19 +26,6 @@ body {
   animation: moving-block 1s linear infinite;
 }
 
-@layer utilities {
-  .aspect-w-1 {
-    --tw-aspect-ratio: 1;
-  }
-}
-
-/*.rounded {
-  mask-image: linear-gradient(to bottom, transparent, black);
-  mask-repeat: no-repeat;
-  mask-position: top;
-}
-*/
-
 .loader-rounding {
   border-bottom-left-radius: 10px; /* Adjust the blur radius as needed */
 }
