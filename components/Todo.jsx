@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { TodosContext } from '@/context/TodosContext';
-import LoadingBar from '@/components/LoadingBar';
-import PulseLoader from '@/components/PulseLoader';
 import { truncateString } from '@/utils/todos';
+import LoadingBar from '@/components/LoadingBar';
 
 export default function Todo({ todo }) {
   const { id } = todo;

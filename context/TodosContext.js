@@ -7,10 +7,6 @@ const TodosProvider = ({ children }) => {
   const [todos, setTodos] = useState([]);
   const [loadingStates, setLoadingStates] = useState({ placeholder: true });
 
-  useEffect(() => {
-    console.log(todos, loadingStates);
-  }, [todos, loadingStates]);
-
   const refreshTodos = async () => {
     try {
       const res = await fetch('/api/getTodos');
